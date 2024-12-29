@@ -1,0 +1,56 @@
+{% load static %}
+{% load security %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block head-title %}
+
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'components/css/templates.css' %}">
+    {% block head-link %}
+
+    {% endblock %}
+
+    {% block head-script %}
+
+    {% endblock %}
+</head>
+
+<body>
+    <nav>
+        <div class="nav-title">
+            <img src="{% static 'components/img/logo.svg' %}" alt="">
+            <a href="/">DIGITALKALIMBALISM</a>
+        </div>
+        <div class="nav-user">
+            {% if request.session.user_id %}
+            <p><a href="#" class="user_name">{{ request.session.user_name|username_security }}</a> | <a href="{% url 'logout' %}" class="blue">Logout</a></p>
+            {% else %}
+            <a href="{% url 'login' %}" class="blue">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main>
+        {% block body-content %}
+
+        {% endblock %}
+    </main>
+
+    <footer>
+        <a href="#">@team</a>
+        <a href="#">Research</a>
+    </footer>
+
+    {% block body-script %}
+
+    {% endblock %}
+</body>
+
+</html>

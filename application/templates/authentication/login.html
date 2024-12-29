@@ -1,0 +1,37 @@
+{% extends "components/templates.html" %}
+
+{% block head-title %}
+    -LOGIN
+{% endblock %}
+
+{% block body-content %}
+<form id="login-form" method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Username" required>
+    <input type="text" name="tel" placeholder="Telephone" required>
+    <button type="submit">Login</button>
+</form>
+<div>
+    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+</div>
+{% endblock %}
+
+{% block body-script %}
+<script>
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const response = await fetch(event.target.action, {
+            method: 'POST',
+            body: formData,
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Login successful');
+            window.location.href = '/'; // Redirect to home or another page after successful login
+        } else {
+            alert('Error: ' + result.error);
+        }
+    });
+</script>
+{% endblock %}

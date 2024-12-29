@@ -1,0 +1,33 @@
+{% extends "components/templates.html" %}
+
+{% block head-title %}
+    -REGISTER
+{% endblock %}
+
+{% block body-content %}
+<form id="register-form" method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+{% endblock %}
+
+{% block body-script %}
+<script>
+    document.getElementById('register-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const response = await fetch(event.target.action, {
+            method: 'POST',
+            body: formData,
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Registration successful');
+            window.location.href = '/login'; // Redirect to home or another page after successful login
+        } else {
+            alert('Error: ' + JSON.stringify(result.errors));
+        }
+    });
+</script>
+{% endblock %}
