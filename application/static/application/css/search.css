@@ -1,0 +1,128 @@
+.search-main-box {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+}
+
+.search-search-box {
+    width: 60%;
+    padding: 30px;
+}
+
+.search-project-box {
+    width: 40%;
+    padding: 30px;
+}
+
+form {
+    width: 90%;
+    max-width: 600px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+}
+
+/* Fieldset and Legends */
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+}
+
+legend {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #555;
+    padding: 0 10px;
+}
+
+/* Labels and Inputs */
+label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #7d4cdb;
+    box-shadow: 0 0 5px rgba(125, 76, 219, 0.5);
+}
+
+/* Buttons */
+button {
+    background-color: #7d4cdb;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #5a36a3;
+}
+
+button[type="button"] {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+button[type="button"]:hover {
+    background-color: #ddd;
+}
+
+/* Video Entry */
+.video-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#video-container {
+    margin-top: 10px;
+}
+
+/* Minimal Spacing */
+p {
+    text-align: center;
+    color: #666;
+    margin: 10px 0;
+}
+
+/* Placeholder Styling */
+input::placeholder, textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    form {
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}

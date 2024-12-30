@@ -1,13 +1,90 @@
 {% extends "components/templates.html" %}
+{% load static %}
 
-{% block body-title %}
+{% block head-title %}
     -SEARCH
 {% endblock %}
 
+{% block head-link %}
+<link rel="stylesheet" href="{% static 'application/css/search.css' %}">
+{% endblock %}
+
 {% block body-content %}
-<div class="welcome">
-  <h1>ยินดีต้อนรับ, คุณเป็นอย่างไรบ้าง?</h1>
-  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit inventore perferendis qui possimus cupiditate
-    fugiat dolor iure nesciunt aliquid saepe!</p>
+<div class="search-main-box">
+  <div class="search-search-box">
+    <h1>Search</h1>
+    <input type="text">
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, porro sapiente voluptatem eum adipisci amet nulla harum. Quisquam et quam recusandae natus, unde asperiores eum reiciendis voluptatem eius iste placeat tenetur ab ex nisi officia sequi nulla sint dignissimos tempore provident aspernatur excepturi consequuntur. Dignissimos assumenda suscipit id modi, velit dolore saepe. Molestiae, consectetur molestias? Cumque maxime dolore nobis incidunt placeat aliquid eveniet neque aut fuga. Ullam delectus laboriosam, eaque cum illum provident dignissimos veniam, voluptas expedita doloremque, dolor totam facilis deserunt eos beatae fugit dolore distinctio vel iure laborum odit eveniet? Maxime optio ad laboriosam, expedita maiores officia cupiditate?</p>
+  </div>
+  <div class="search-project-box">
+    <h1>Project</h1>
+    <form method="post" action="{% url 'search' %}">
+        {% csrf_token %}
+
+        <!-- Project Section -->
+        <fieldset>
+            <legend>Project Section</legend>
+
+            <!-- Select or Create New Project -->
+            <label for="existing_project">Choose an Existing Project:</label>
+            <select name="existing_project" id="existing_project">
+                <option value="">--- Select Existing Project ---</option>
+                {% for project in projects %}
+                    <option value="{{ project.id }}">{{ project.title }}</option>
+                {% endfor %}
+            </select>
+
+            <p>OR</p>
+
+            <label for="new_project_title">Create a New Project:</label>
+            <input type="text" name="new_project_title" id="new_project_title" placeholder="Enter new project title">
+
+            <label for="new_project_description">Description:</label>
+            <textarea name="new_project_description" id="new_project_description" placeholder="What is your goal for this project?"></textarea>
+        </fieldset>
+
+        <!-- Video Section -->
+        <fieldset>
+            <legend>Video Section</legend>
+
+            <div id="video-container">
+                <div class="video-entry">
+                    <label for="video_id_1">Video ID:</label>
+                    <input type="text" name="video_id[]" id="video_id_1" placeholder="Enter YouTube Video ID">
+
+                    <label for="video_title_1">Title:</label>
+                    <input type="text" name="video_title[]" id="video_title_1" placeholder="Enter Video Title">
+                </div>
+            </div>
+
+            <button type="button" onclick="addVideoEntry()">Add Another Video</button>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+    </form>
+  </div>
 </div>
+{% endblock %}
+
+{% block body-script %}
+<script>
+  let videoCount = 1;
+
+  function addVideoEntry() {
+      videoCount++;
+      const container = document.getElementById('video-container');
+
+      const newEntry = document.createElement('div');
+      newEntry.classList.add('video-entry');
+      newEntry.innerHTML = `
+          <label for="video_id_${videoCount}">Video ID:</label>
+          <input type="text" name="video_id[]" id="video_id_${videoCount}" placeholder="Enter YouTube Video ID">
+
+          <label for="video_title_${videoCount}">Title:</label>
+          <input type="text" name="video_title[]" id="video_title_${videoCount}" placeholder="Enter Video Title">
+      `;
+      container.appendChild(newEntry);
+  }
+</script>
 {% endblock %}

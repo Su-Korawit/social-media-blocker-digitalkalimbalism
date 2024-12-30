@@ -2,19 +2,27 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import logout
 from .forms import UserForm
-from .models import User, Project
+from .models import User, Project, Progress, Video
 
 def home(request):
+    projects = []  # Default: Empty list of projects
+
     if request.session.get('user_id'):  # Check if the user is logged in
         user_id = request.session['user_id']
         try:
-            user = User.objects.get(id=user_id)  # Fetch the logged-in user
-            projects = Project.objects.filter(user=user)  # Retrieve projects for the user
-        except User.DoesNotExist:
-            projects = []  # If user does not exist, return an empty list
-    else:
-        projects = []  # If not logged in, return an empty list
+            # Fetch the logged-in user
+            user = User.objects.get(id=user_id)
 
+            # Retrieve projects for the user
+            projects = Project.objects.filter(users=user).prefetch_related('progress')
+
+            # Add progress percentages to each project
+            for project in projects:
+                project.progress_percentages = [p.progress_percentage for p in project.progress.all()]
+        except User.DoesNotExist:
+            pass
+
+    # Render the home page
     return render(request, 'application/index.html', {'projects': projects})
 
 def user_register(request):
@@ -56,7 +64,43 @@ def team(request):
     return render(request, 'application/team.html')
 
 def search(request):
-    return render(request, 'application/search.html')
+    if request.session.get('user_id'):  # Check if the user is logged in
+        user_id = request.session['user_id']
+        # Fetch the logged-in user
+        user = User.objects.get(id=user_id)
+    if request.method == "POST":
+        # Handle Project
+        project = None
+        if request.POST.get('existing_project'):
+            project_id = request.POST['existing_project']
+            project = Project.objects.get(id=project_id)
+        elif request.POST.get('new_project_title'):
+            new_project_title = request.POST['new_project_title']
+            new_project_description = request.POST['new_project_description']
+            project = Project.objects.create(title=new_project_title, description=new_project_description)
+            project.users.set([user])
+        # Handle Videos
+        if project and 'video_id[]' in request.POST:
+            video_ids = request.POST.getlist('video_id[]')
+            video_titles = request.POST.getlist('video_title[]')
+            print(video_ids, video_titles)
+            # for video_id, video_title in zip(video_ids, video_titles):
+            #     Video.objects.create(projects=project, video_id=video_id, title=video_title)
+
+        return redirect('home')  # Redirect to home or a success page
+
+    # Pass existing projects to the template
+    if request.session.get('user_id'):  # Check if the user is logged in
+        user_id = request.session['user_id']
+        try:
+            # Fetch the logged-in user
+            user = User.objects.get(id=user_id)
+
+            # Retrieve projects for the user
+            projects = Project.objects.filter(users=user)
+        except User.DoesNotExist:
+            pass
+    return render(request, 'application/search.html', {'projects': projects})
 
 def watch(request):
     return render(request, 'application/watch.html')

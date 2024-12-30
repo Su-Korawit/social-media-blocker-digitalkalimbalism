@@ -1,24 +1,3 @@
-/* .index-main-box {
-    display: flex;
-}
-
-.index-mascot-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40%;
-    
-}
-.index-preview-box {
-    width: 60%;
-}
-
-.index-mascot-img {
-    border-radius: 100%;
-    width: 200px;
-    height: 200px;
-} */
-
 .index-main-box {
     display: flex;
     flex-wrap: wrap; /* Allows wrapping for smaller screens */
@@ -48,38 +27,38 @@
         width: 100%; /* Full width for smaller screens */
         margin-bottom: 20px; /* Adds spacing between sections */
     }
-
     .index-mascot-img {
-        width: 150px; /* Adjust size for smaller screens */
-        height: 150px;
+        width: 300px;
+        height: 300px;
     }
 }
 
-.index-project-preview-box {
+.index-project-preview-container-box {
     display: flex;
+    flex-wrap: nowrap; /* Ensures all items stay in one row */
     gap: 15px;
-    overflow-x: auto;
+    overflow-x: auto; /* Enables horizontal scrolling */
     padding: 10px;
     scroll-behavior: smooth;
-    white-space: nowrap; /* Ensures the elements stay in one row */
+    white-space: nowrap; /* Prevents line breaks */
 }
 
-.project-container::-webkit-scrollbar {
-    height: 8px;
+.index-project-preview-container-box::-webkit-scrollbar {
+    height: 8px; /* Scrollbar height */
 }
 
-.project-container::-webkit-scrollbar-thumb {
+.index-project-preview-container-box::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 4px;
 }
 
-.project-container::-webkit-scrollbar-track {
+.index-project-preview-container-box::-webkit-scrollbar-track {
     background: #f0f0f0;
 }
 
 .project-box {
     width: 300px;
-    flex-shrink: 0; /* Prevents shrinking */
+    flex-shrink: 0; /* Prevents shrinking to keep fixed size */
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
@@ -119,11 +98,4 @@
     color: #666;
     margin: 0 10px 15px;
     line-height: 1.5;
-}
-
-@media (max-width: 480px) {
-    .index-mascot-img {
-        width: 120px; /* Smaller size for very small screens */
-        height: 120px;
-    }
 }

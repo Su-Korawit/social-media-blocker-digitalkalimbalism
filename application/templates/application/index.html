@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body-title %}
-    -HOME
+-HOME
 {% endblock %}
 
 {% block head-link %}
@@ -12,14 +12,21 @@
 {% block body-content %}
 <div class="index-main-box">
   <div class="index-mascot-box">
-    <img src="{% static 'application/img/mascot.jpg' %}" alt="" class="index-mascot-img">
+    <img src="{% static 'application/img/mascot.webp' %}" alt="" class="index-mascot-img">
   </div>
   <div class="index-preview-box">
     <h2>Kalinba?</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel repudiandae iure commodi reiciendis quis? Eligendi soluta nisi ipsum fugit libero, pariatur earum sunt culpa enim repellendus nemo non totam repellat quo fugiat asperiores vero molestias magni repudiandae itaque ducimus adipisci, ea vel officiis? Expedita soluta et fugiat iure eos optio possimus sed dolorum rerum dolor iste, dolore quis, earum, commodi similique pariatur reprehenderit culpa. Eos cumque, doloribus ipsam est labore inventore rem neque aspernatur placeat qui nisi enim adipisci? Explicabo cum earum deleniti laboriosam reiciendis ea, non quia eaque cumque aliquam saepe consequatur! Sint totam earum error natus corrupti voluptate!</p>
+    <p>&emsp;Expedita soluta et fugiat iure eos optio possimus sed dolorum rerum dolor iste, dolore quis, earum, commodi
+      similique pariatur reprehenderit culpa. Eos cumque, doloribus ipsam est labore inventore rem neque aspernatur
+      placeat qui nisi enim adipisci? Explicabo cum earum deleniti laboriosam reiciendis ea, non quia eaque cumque
+      aliquam saepe consequatur! Sint totam earum error natus corrupti voluptate!</p>
+    <br>
     <hr>
+    <br>
     <h2>Digital Minimalism?</h2>
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero perferendis nisi laborum numquam accusamus, accusantium consequuntur, possimus ea deleniti veritatis aperiam, odio perspiciatis porro veniam quae maiores doloribus sunt. Fugit repellendus aliquam commodi deleniti at quae minus, quas debitis impedit reprehenderit consectetur minima maxime veniam quo tempora adipisci est suscipit totam aspernatur? Omnis optio iure ratione dicta ullam cumque quas fugit itaque odit distinctio. Ea provident iure similique voluptatem ex?</p>
+    <p>&emsp;Fugit repellendus aliquam commodi deleniti at quae minus, quas debitis impedit reprehenderit consectetur
+      minima maxime veniam quo tempora adipisci est suscipit totam aspernatur? Omnis optio iure ratione dicta ullam
+      cumque quas fugit itaque odit distinctio. Ea provident iure similique voluptatem ex?</p>
   </div>
 </div>
 
@@ -27,23 +34,30 @@
 <hr>
 <br>
 
-<a href="#">Add project</a>
-<div class="index-project-preview-box">
+<div class="index-project-preview-container-box">
   {% if projects %}
-  <div class="projects-container">
-      {% for project in projects %}
-          <div class="project-box">
-              <div class="progress-bar">
-                  <div class="progress" style="width: {{ project.progress_set.last.progress_percentage|default:0 }}%;"></div>
-              </div>
-              <img class="project-cover" src="{% static 'application/img/mascot.jpg' %}" alt="Project Cover">
-              <h3 class="project-title">{{ project.title }}</h3>
-              <p class="project-description">{{ project.description|default:"No description available." }}</p>
-          </div>
-      {% endfor %}
-  </div>
-{% else %}
-  <p>No projects available. <a href="#">Start a new project</a></p>
-{% endif %}
+    {% for project in projects %}
+    <div class="project-box">
+      <div class="progress-bar">
+        <div class="progress" style="width: {{ project.progress_percentages|last|default:0 }}%;"></div>
+      </div>
+      <img class="project-cover" src="{% static 'application/img/mascot.webp' %}" alt="Project Cover">
+      <h3 class="project-title">{{ project.title }}</h3>
+      <p class="project-description">{{ project.description|default:"No description available." }}</p>
+    </div>
+    {% endfor %}
+    <div class="project-box">
+      <a href="/search">
+        <div class="progress-bar">
+          <div class="progress" style="width: 0%;"></div>
+        </div>
+        <img class="project-cover" src="{% static 'application/img/plus.svg' %}" alt="Project Cover">
+        <h3 class="project-title">{{ project.title }}</h3>
+        <p class="project-description">{{ project.description|default:"No description available." }}</p>
+      </a>
+    </div>
+  {% else %}
+  <p>เริ่มสร้างโครงงานของคุณ! <a href="/search">Start a new project</a></p>
+  {% endif %}
 </div>
 {% endblock %}
