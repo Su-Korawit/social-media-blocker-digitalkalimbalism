@@ -99,15 +99,15 @@
 
                     <div id="video-container">
                         <div class="video-entry">
-                            <label for="video_title_1">Title:</label>
+                            <!-- <label for="video_title_1">Title:</label>
                             <input type="text" name="video_title[]" id="video_title_1" placeholder="Enter Video Title">
 
                             <label for="video_id_1">Video ID:</label>
-                            <input type="text" name="video_id[]" id="video_id_1" placeholder="Enter YouTube Video ID">
+                            <input type="text" name="video_id[]" id="video_id_1" placeholder="Enter YouTube Video ID"> -->
                         </div>
                     </div>
-
-                    <button type="button" onclick="addVideoEntry()">Add Another Video</button>
+                    <hr>
+                    <button type="button" onclick="addVideoEntry()">Add Video</button>
                 </fieldset>
 
                 <!-- Submit Button -->
@@ -120,7 +120,7 @@
 {% endblock %}
 
 {% block body-script %}
-<script>
+<!-- <script>
     let videoCount = 1;
 
     function addVideoEntry() {
@@ -138,5 +138,61 @@
       `;
         container.appendChild(newEntry);
     }
+</script> -->
+<script>
+// ตัวแปรสำหรับนับจำนวนฟอร์ม
+let videoCount = 1;
+
+// ฟังก์ชันเพิ่มฟอร์มใหม่พร้อมข้อมูลวิดีโอ
+function addVideoForm(title, videoId) {
+    videoCount++;
+    const container = document.getElementById('video-container');
+
+    const newEntry = document.createElement('div');
+    newEntry.classList.add('video-entry');
+    newEntry.innerHTML = `
+        <hr>
+        <label for="video_title_${videoCount}">Title:</label>
+        <input type="text" name="video_title[]" id="video_title_${videoCount}" value="${title}" placeholder="Enter Video Title">
+        
+        <label for="video_id_${videoCount}">Video ID:</label>
+        <input type="text" name="video_id[]" id="video_id_${videoCount}" value="${videoId}" placeholder="Enter YouTube Video ID">
+    `;
+    container.appendChild(newEntry);
+}
+
+// การตั้งค่าการทำงานเมื่อคลิกที่วิดีโอ
+document.addEventListener('DOMContentLoaded', () => {
+    // เลือกทุกองค์ประกอบที่มีคลาส 'video-item'
+    const videoItems = document.querySelectorAll('.video-item');
+
+    videoItems.forEach(video => {
+        video.addEventListener('click', () => {
+            // ดึงข้อมูลจาก dataset ขององค์ประกอบ
+            const title = video.dataset.videoTitle;
+            const videoId = video.dataset.videoId;
+
+            // เรียกใช้ฟังก์ชันเพิ่มฟอร์มพร้อมข้อมูล
+            addVideoForm(title, videoId);
+        });
+    });
+});
+
+function addVideoEntry() {
+    videoCount++;
+    const container = document.getElementById('video-container');
+
+    const newEntry = document.createElement('div');
+    newEntry.classList.add('video-entry');
+    newEntry.innerHTML = `
+        <hr>
+        <label for="video_title_${videoCount}">Title:</label>
+        <input type="text" name="video_title[]" id="video_title_${videoCount}" placeholder="Enter Video Title">
+        
+        <label for="video_id_${videoCount}">Video ID:</label>
+        <input type="text" name="video_id[]" id="video_id_${videoCount}" placeholder="Enter YouTube Video ID">
+    `;
+    container.appendChild(newEntry);
+}
 </script>
 {% endblock %}

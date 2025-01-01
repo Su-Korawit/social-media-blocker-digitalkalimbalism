@@ -38,12 +38,14 @@
   {% if projects %}
     {% for project in projects %}
     <div class="index-project-box">
+      <a href="/watch/{{ project.id }}">
       <div class="index-progress-bar">
         <div class="index-progress" style="width: {{ project.progress_percentages|last|default:0 }}%;"></div>
       </div>
       <img class="index-project-cover" src="{% static 'application/img/mascot.webp' %}" alt="Project Cover">
       <h3 class="index-project-title">{{ project.title }}</h3>
       <p class="index-project-description">{{ project.description|default:"No description available." }}</p>
+    </a>
     </div>
     {% endfor %}
     <div class="index-project-box">

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import logout
 from .forms import UserForm
@@ -24,6 +24,8 @@ def home(request):
         except User.DoesNotExist:
             pass
 
+    # for project in projects:
+    #     print(project.id)
     # Render the home page
     return render(request, 'application/index.html', {'projects': projects})
 
@@ -66,8 +68,23 @@ def team(request):
     return render(request, 'application/team.html')
 
 
-def watch(request):
-    return render(request, 'application/watch.html')
+def watch(request, id):
+    # Fetch the project with the given ID
+    project = get_object_or_404(Project, id=id)
+
+    # Fetch videos associated with the project
+    videos = project.videos.all()
+
+    # Fetch progress associated with the project
+    progress = project.progress.all()
+
+    # Pass the data to the template
+    context = {
+        'project': project,
+        'videos': videos,
+        'progress': progress,
+    }
+    return render(request, 'application/watch.html', context)
 
 # def search(request):
 #     if request.session.get('user_id'):  # Check if the user is logged in
