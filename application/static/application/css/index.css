@@ -20,18 +20,6 @@
     height: 200px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .index-mascot-box,
-    .index-preview-box {
-        width: 100%; /* Full width for smaller screens */
-        margin-bottom: 20px; /* Adds spacing between sections */
-    }
-    .index-mascot-img {
-        width: 300px;
-        height: 300px;
-    }
-}
 
 .index-project-preview-container-box {
     display: flex;
@@ -56,7 +44,7 @@
     background: #f0f0f0;
 }
 
-.project-box {
+.index-project-box {
     width: 300px;
     flex-shrink: 0; /* Prevents shrinking to keep fixed size */
     border: 1px solid #ddd;
@@ -67,35 +55,48 @@
     background-color: #fff;
 }
 
-.progress-bar {
+.index-progress-bar {
     width: 100%;
     height: 10px;
     background-color: #e0e0e0;
 }
 
-.progress {
+.index-progress {
     height: 100%;
     background-color: purple;
     transition: width 0.3s ease;
 }
 
-.project-cover {
+.index-project-cover {
     width: 100%;
     height: 250px;
     object-fit: cover;
     display: block;
 }
 
-.project-title {
+.index-project-title {
     font-size: 1.1rem;
     font-weight: bold;
     margin: 10px;
     color: #333;
 }
 
-.project-description {
+.index-project-description {
     font-size: 0.9rem;
     color: #666;
     margin: 0 10px 15px;
     line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .index-mascot-box,
+    .index-preview-box {
+        width: 100%; /* Full width for smaller screens */
+        margin-bottom: 20px; /* Adds spacing between sections */
+    }
+    .index-mascot-img {
+        width: 300px;
+        height: 300px;
+    }
 }

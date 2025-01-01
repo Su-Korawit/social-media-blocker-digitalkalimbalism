@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head-title %}
-    -SEARCH
+-SEARCH
 {% endblock %}
 
 {% block head-link %}
@@ -10,81 +10,133 @@
 {% endblock %}
 
 {% block body-content %}
-<div class="search-main-box">
-  <div class="search-search-box">
-    <h1>Search</h1>
-    <input type="text">
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, porro sapiente voluptatem eum adipisci amet nulla harum. Quisquam et quam recusandae natus, unde asperiores eum reiciendis voluptatem eius iste placeat tenetur ab ex nisi officia sequi nulla sint dignissimos tempore provident aspernatur excepturi consequuntur. Dignissimos assumenda suscipit id modi, velit dolore saepe. Molestiae, consectetur molestias? Cumque maxime dolore nobis incidunt placeat aliquid eveniet neque aut fuga. Ullam delectus laboriosam, eaque cum illum provident dignissimos veniam, voluptas expedita doloremque, dolor totam facilis deserunt eos beatae fugit dolore distinctio vel iure laborum odit eveniet? Maxime optio ad laboriosam, expedita maiores officia cupiditate?</p>
-  </div>
-  <div class="search-project-box">
-    <h1>Project</h1>
-    <form method="post" action="{% url 'search' %}">
-        {% csrf_token %}
+<div class="search-container">
+    <div class="search-main">
+        <div class="search-box">
+            <form method="get" action="{% url 'search' %}" class="search-form">
+                <fieldset>
+                    <legend>Search Section</legend>
+                <input type="text" name="q" placeholder="ค้นหาสิ่งที่มีคุณค่าสำหรับคุณ..." value="{{ query }}">
+                <button type="submit">Search</button>
+                </fieldset>
+            </form>
 
-        <!-- Project Section -->
-        <fieldset>
-            <legend>Project Section</legend>
-
-            <!-- Select or Create New Project -->
-            <label for="existing_project">Choose an Existing Project:</label>
-            <select name="existing_project" id="existing_project">
-                <option value="">--- Select Existing Project ---</option>
-                {% for project in projects %}
-                    <option value="{{ project.id }}">{{ project.title }}</option>
-                {% endfor %}
-            </select>
-
-            <p>OR</p>
-
-            <label for="new_project_title">Create a New Project:</label>
-            <input type="text" name="new_project_title" id="new_project_title" placeholder="Enter new project title">
-
-            <label for="new_project_description">Description:</label>
-            <textarea name="new_project_description" id="new_project_description" placeholder="What is your goal for this project?"></textarea>
-        </fieldset>
-
-        <!-- Video Section -->
-        <fieldset>
-            <legend>Video Section</legend>
-
-            <div id="video-container">
-                <div class="video-entry">
-                    <label for="video_id_1">Video ID:</label>
-                    <input type="text" name="video_id[]" id="video_id_1" placeholder="Enter YouTube Video ID">
-
-                    <label for="video_title_1">Title:</label>
-                    <input type="text" name="video_title[]" id="video_title_1" placeholder="Enter Video Title">
+            <div class="search-results">
+                {% if videos %}
+                <div class="video-list">
+                    {% for video in videos %}
+                    <div class="video-item" data-video-id="{{ video.id.videoId }}"
+                        data-video-title="{{ video.snippet.title }}"
+                        data-video-thumb="{{ video.snippet.thumbnails.medium.url }}">
+                        <img src="{{ video.snippet.thumbnails.medium.url }}" alt="{{ video.snippet.title }}">
+                        <div>
+                            <h4>{{ video.snippet.title }}</h4>
+                            <p>{{ video.snippet.title }}{{ video.snippet.title }}{{ video.snippet.title }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
+            
+                {% endif %}
+
+                <!-- {% if playlists %}
+                <hr>
+                <div class="playlist-section">
+                    <div class="playlist-list">
+                        {% for playlist in playlists %}
+                        <div class="playlist-item" data-video-id="{{ playlist.id.playlistId }}"
+                            data-video-title="{{ playlist.snippet.title }}"
+                            data-video-thumb="{{ playlist.snippet.thumbnails.default.url }}">
+                            <img src="{{ playlist.snippet.thumbnails.default.url }}" alt="{{ playlist.snippet.title }}">
+                            <h4>{{ playlist.snippet.title }}</h4>
+                        </div>
+                        {% for video in playlist.videos %}
+                        <div class="video-item" data-video-id="{{ video.videoId }}"
+                            data-video-title="{{ video.title }}"
+                            data-video-thumb="{{ video.thumbnail }}">
+                            <img src="{{ video.thumbnail }}" alt="{{ video.title }}">
+                            <h4>{{ video.title }}</h4>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %} -->
             </div>
+        </div>
 
-            <button type="button" onclick="addVideoEntry()">Add Another Video</button>
-        </fieldset>
+        <div class="project-box">
+            <form method="post" action="{% url 'search' %}">
+                {% csrf_token %}
 
-        <!-- Submit Button -->
-        <button type="submit">Submit</button>
-    </form>
-  </div>
+                <!-- Project Section -->
+                <fieldset>
+                    <legend>Project Section</legend>
+
+                    <!-- Select or Create New Project -->
+                    <label for="existing_project">Choose an Existing Project:</label>
+                    <select name="existing_project" id="existing_project">
+                        <option value="">--- Select Existing Project ---</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.title }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <p>OR</p>
+
+                    <label for="new_project_title">Create a New Project:</label>
+                    <input type="text" name="new_project_title" id="new_project_title"
+                        placeholder="Enter new project title">
+
+                    <label for="new_project_description">Description:</label>
+                    <textarea name="new_project_description" id="new_project_description"
+                        placeholder="What is your goal for this project?"></textarea>
+                </fieldset>
+
+                <!-- Video Section -->
+                <fieldset>
+                    <legend>Video Section</legend>
+
+                    <div id="video-container">
+                        <div class="video-entry">
+                            <label for="video_title_1">Title:</label>
+                            <input type="text" name="video_title[]" id="video_title_1" placeholder="Enter Video Title">
+
+                            <label for="video_id_1">Video ID:</label>
+                            <input type="text" name="video_id[]" id="video_id_1" placeholder="Enter YouTube Video ID">
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="addVideoEntry()">Add Another Video</button>
+                </fieldset>
+
+                <!-- Submit Button -->
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
 
 {% block body-script %}
 <script>
-  let videoCount = 1;
+    let videoCount = 1;
 
-  function addVideoEntry() {
-      videoCount++;
-      const container = document.getElementById('video-container');
+    function addVideoEntry() {
+        videoCount++;
+        const container = document.getElementById('video-container');
 
-      const newEntry = document.createElement('div');
-      newEntry.classList.add('video-entry');
-      newEntry.innerHTML = `
-          <label for="video_id_${videoCount}">Video ID:</label>
-          <input type="text" name="video_id[]" id="video_id_${videoCount}" placeholder="Enter YouTube Video ID">
-
+        const newEntry = document.createElement('div');
+        newEntry.classList.add('video-entry');
+        newEntry.innerHTML = `
+          <hr>
           <label for="video_title_${videoCount}">Title:</label>
           <input type="text" name="video_title[]" id="video_title_${videoCount}" placeholder="Enter Video Title">
+          <label for="video_id_${videoCount}">Video ID:</label>
+          <input type="text" name="video_id[]" id="video_id_${videoCount}" placeholder="Enter YouTube Video ID">
       `;
-      container.appendChild(newEntry);
-  }
+        container.appendChild(newEntry);
+    }
 </script>
 {% endblock %}

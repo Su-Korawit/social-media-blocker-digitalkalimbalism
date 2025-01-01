@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import logout
 from .forms import UserForm
+from googleapiclient.discovery import build
+from application.config import YOUTUBE_API_KEY
 from .models import User, Project, Progress, Video
 
 def home(request):
@@ -63,13 +65,127 @@ def user_logout(request):
 def team(request):
     return render(request, 'application/team.html')
 
+
+def watch(request):
+    return render(request, 'application/watch.html')
+
+# def search(request):
+#     if request.session.get('user_id'):  # Check if the user is logged in
+#         user_id = request.session['user_id']
+#         # Fetch the logged-in user
+#         user = User.objects.get(id=user_id)
+#     if request.method == "POST":
+#         # Handle Project
+#         project = None
+#         if request.POST.get('existing_project'):
+#             project_id = request.POST['existing_project']
+#             project = Project.objects.get(id=project_id)
+#         elif request.POST.get('new_project_title'):
+#             new_project_title = request.POST['new_project_title']
+#             new_project_description = request.POST['new_project_description']
+#             project = Project.objects.create(title=new_project_title, description=new_project_description)
+#             project.users.set([user])
+#         # Handle Videos
+#         if project and 'video_id[]' in request.POST:
+#             video_ids = request.POST.getlist('video_id[]')
+#             video_titles = request.POST.getlist('video_title[]')
+#             for video_id, video_title in zip(video_ids, video_titles):
+#                 video = Video.objects.create(video_id=video_id, title=video_title)
+#                 video.projects.set([project])
+
+#         return redirect('home')  # Redirect to home or a success page
+
+#     # Pass existing projects to the template
+#     if request.session.get('user_id'):  # Check if the user is logged in
+#         user_id = request.session['user_id']
+#         try:
+#             # Fetch the logged-in user
+#             user = User.objects.get(id=user_id)
+
+#             # Retrieve projects for the user
+#             projects = Project.objects.filter(users=user)
+#         except User.DoesNotExist:
+#             pass
+#     return render(request, 'application/search.html', {'projects': projects})
+
+def search_videos(query):
+    youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
+    request = youtube.search().list(
+        part="snippet",
+        q=query,
+        type="video",
+        maxResults=7
+    )
+    response = request.execute()
+    return response['items']
+
+def search_playlists(query):
+    youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
+    request = youtube.search().list(
+        part="snippet",
+        q=query,
+        type="playlist",
+        maxResults=2
+    )
+    response = request.execute()
+    return response['items']
+
+def get_videos_in_playlist(playlist_id):
+    # print(playlist_id)
+    # print(YOUTUBE_API_KEY)
+    youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
+    videos = []
+    try:
+        request = youtube.playlistItems().list(
+            part="snippet",
+            playlistId=playlist_id,
+            maxResults=50
+        )
+        response = request.execute()
+        # print(response)
+        for item in response.get('items', []):
+            video_id = item['snippet']['resourceId']['videoId']
+            # print(video_id)
+            title = item['snippet']['title']
+            # print(title)
+            thumbnail = item['snippet']['thumbnails']['medium']['url']
+            # print(thumbnail)
+            videos.append({
+                "videoId": video_id,
+                "title": title,
+                "thumbnail": thumbnail
+            })
+    except Exception as e:
+        print(f"Error fetching videos in playlist: {e}")
+
+    # print(videos)
+    return videos
+
 def search(request):
-    if request.session.get('user_id'):  # Check if the user is logged in
+    query = request.GET.get('q', '')
+    videos = []
+    playlists = []
+    projects = []
+    user = None
+
+    if request.session.get('user_id'):
         user_id = request.session['user_id']
-        # Fetch the logged-in user
-        user = User.objects.get(id=user_id)
+        try:
+            user = User.objects.get(id=user_id)
+            projects = Project.objects.filter(users=user)
+        except User.DoesNotExist:
+            pass
+
+    if query:
+        videos = search_videos(query)
+        # playlists = search_playlists(query)
+
+        # for playlist in playlists:
+        #     playlist_id = playlist['id']['playlistId']
+        #     playlist_videos = get_videos_in_playlist(playlist_id)
+        #     playlist['videos'] = playlist_videos
+
     if request.method == "POST":
-        # Handle Project
         project = None
         if request.POST.get('existing_project'):
             project_id = request.POST['existing_project']
@@ -79,28 +195,22 @@ def search(request):
             new_project_description = request.POST['new_project_description']
             project = Project.objects.create(title=new_project_title, description=new_project_description)
             project.users.set([user])
-        # Handle Videos
+
         if project and 'video_id[]' in request.POST:
             video_ids = request.POST.getlist('video_id[]')
             video_titles = request.POST.getlist('video_title[]')
-            print(video_ids, video_titles)
-            # for video_id, video_title in zip(video_ids, video_titles):
-            #     Video.objects.create(projects=project, video_id=video_id, title=video_title)
+            for video_id, video_title in zip(video_ids, video_titles):
+                video = Video.objects.create(video_id=video_id, title=video_title)
+                video.projects.set([project])
 
-        return redirect('home')  # Redirect to home or a success page
+        return redirect('home')
 
-    # Pass existing projects to the template
-    if request.session.get('user_id'):  # Check if the user is logged in
-        user_id = request.session['user_id']
-        try:
-            # Fetch the logged-in user
-            user = User.objects.get(id=user_id)
-
-            # Retrieve projects for the user
-            projects = Project.objects.filter(users=user)
-        except User.DoesNotExist:
-            pass
-    return render(request, 'application/search.html', {'projects': projects})
-
-def watch(request):
-    return render(request, 'application/watch.html')
+    # for playlist in playlists:
+    #     print(playlist)
+    
+    return render(request, 'application/search.html', {
+        'videos': videos,
+        'playlists': playlists,
+        'query': query,
+        'projects': projects
+    })

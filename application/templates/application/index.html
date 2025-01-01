@@ -37,23 +37,23 @@
 <div class="index-project-preview-container-box">
   {% if projects %}
     {% for project in projects %}
-    <div class="project-box">
-      <div class="progress-bar">
-        <div class="progress" style="width: {{ project.progress_percentages|last|default:0 }}%;"></div>
+    <div class="index-project-box">
+      <div class="index-progress-bar">
+        <div class="index-progress" style="width: {{ project.progress_percentages|last|default:0 }}%;"></div>
       </div>
-      <img class="project-cover" src="{% static 'application/img/mascot.webp' %}" alt="Project Cover">
-      <h3 class="project-title">{{ project.title }}</h3>
-      <p class="project-description">{{ project.description|default:"No description available." }}</p>
+      <img class="index-project-cover" src="{% static 'application/img/mascot.webp' %}" alt="Project Cover">
+      <h3 class="index-project-title">{{ project.title }}</h3>
+      <p class="index-project-description">{{ project.description|default:"No description available." }}</p>
     </div>
     {% endfor %}
-    <div class="project-box">
+    <div class="index-project-box">
       <a href="/search">
-        <div class="progress-bar">
-          <div class="progress" style="width: 0%;"></div>
+        <div class="index-progress-bar">
+          <div class="index-progress" style="width: 0%;"></div>
         </div>
-        <img class="project-cover" src="{% static 'application/img/plus.svg' %}" alt="Project Cover">
-        <h3 class="project-title">{{ project.title }}</h3>
-        <p class="project-description">{{ project.description|default:"No description available." }}</p>
+        <img class="index-project-cover" src="{% static 'application/img/plus.svg' %}" alt="Project Cover">
+        <h3 class="index-project-title">{{ project.title }}</h3>
+        <p class="index-project-description">{{ project.description|default:"No description available." }}</p>
       </a>
     </div>
   {% else %}

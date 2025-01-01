@@ -1,128 +1,133 @@
-.search-main-box {
+.search-main {
+    display: flex; /* จัดเรียงภายในให้อยู่ในแนวนอน */
+    justify-content: space-between; /* เพิ่มระยะห่างระหว่างกล่อง */
+    gap: 20px; /* ระยะห่างระหว่างกล่อง */
+}
+
+.search-box {
+    flex: 6; /* สัดส่วน 70% */
+    max-width: 60%; /* จำกัดความกว้างสูงสุด */
+}
+
+.project-box {
+    flex-basis: 400px; /* กำหนดขนาดคงที่ของกล่องด้านขวา */
+    flex-shrink: 0; /* ป้องกันการยืดหรือหดตัว */
+    border-radius: 8px; /* มุมโค้งมน */
+}
+
+.video-item {
     display: flex;
-    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 10px;
 }
 
-.search-search-box {
-    width: 60%;
-    padding: 30px;
+.video-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.search-project-box {
-    width: 40%;
-    padding: 30px;
+.video-item img {
+    width: 120px; /* ขนาดของ Thumbnail */
+    height: auto;
+    border-radius: 4px;
+}
+
+.video-item div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.video-item h4 {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.video-item p {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
 }
 
 form {
-    width: 90%;
-    max-width: 600px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     margin: 20px auto;
+    margin-bottom: 10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Fieldset and Legends */
 fieldset {
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: none;
     margin-bottom: 20px;
-    padding: 10px 15px;
+
+    button {
+        align-self: flex-end;
+    }
 }
 
 legend {
-    font-size: 1.2rem;
     font-weight: bold;
-    color: #555;
-    padding: 0 10px;
+    font-size: 1.2em;
+    margin-bottom: 10px;
 }
 
-/* Labels and Inputs */
 label {
     display: block;
-    font-size: 0.9rem;
     margin-bottom: 5px;
-    color: #555;
+    font-weight: bold;
 }
 
-input, select, textarea {
+input[type="text"], 
+textarea, 
+select {
     width: 100%;
-    padding: 10px;
-    font-size: 0.9rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 8px;
     margin-bottom: 15px;
-    outline: none;
-    transition: all 0.3s ease;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
 }
 
-input:focus, select:focus, textarea:focus {
-    border-color: #7d4cdb;
-    box-shadow: 0 0 5px rgba(125, 76, 219, 0.5);
+textarea {
+    resize: vertical;
 }
 
-/* Buttons */
 button {
-    background-color: #7d4cdb;
-    color: #fff;
-    border: none;
+    display: inline-block;
     padding: 10px 20px;
-    font-size: 0.9rem;
-    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    color: blue;
+    background-color: none;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-align: center;
 }
 
-button:hover {
-    background-color: #5a36a3;
-}
 
-button[type="button"] {
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-    margin-top: 10px;
-}
-
-button[type="button"]:hover {
-    background-color: #ddd;
-}
-
-/* Video Entry */
-.video-entry {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+#video-container .video-entry {
     margin-bottom: 15px;
 }
 
-#video-container {
-    margin-top: 10px;
-}
 
-/* Minimal Spacing */
-p {
-    text-align: center;
-    color: #666;
-    margin: 10px 0;
-}
-
-/* Placeholder Styling */
-input::placeholder, textarea::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    form {
-        padding: 15px;
-    }
-
-    button {
-        width: 100%;
-        margin-top: 10px;
-    }
+.video-item:hover {
+    transform: translateY(-5px); /* ขยับกล่องขึ้นเล็กน้อย */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นรูปมือ */
 }
