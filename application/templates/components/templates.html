@@ -30,7 +30,8 @@
         </div>
         <div class="nav-user">
             {% if request.session.user_id %}
-            <p><a href="#" class="user_name">{{ request.session.user_name|username_security }}</a>, <a href="{% url 'logout' %}" class="blue">Logout</a></p>
+            <p><a href="#" class="user_name">{{ request.session.user_name|username_security }}</a>, <a
+                    href="{% url 'logout' %}" class="blue">Logout</a></p>
             {% else %}
             <a href="{% url 'login' %}" class="blue">Login</a>
             {% endif %}
@@ -44,13 +45,20 @@
     </main>
 
     <footer>
-        <a href="#" class="blue">@Team, Review</a>
+        <a href="#" class="blue team-alert">@Team, Review</a>
         <a href="#" class="blue">Research</a>
     </footer>
 
     {% block body-script %}
 
     {% endblock %}
+
+    <script>
+        document.querySelector('.team-alert').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default action of the link
+            alert('Concept, Web Dev, By กรวิทย์ สุพร\nSound by ศุภณัฐ อึ๊งโสภาพงษ์');
+        });   
+    </script>
 </body>
 
 </html>

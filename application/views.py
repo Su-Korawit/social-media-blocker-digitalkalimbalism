@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import logout
-from .forms import UserForm
+from .forms import UserForm, ProgressForm
 from googleapiclient.discovery import build
 from application.config import YOUTUBE_API_KEY
 from .models import User, Project, Progress, Video
@@ -78,11 +78,22 @@ def watch(request, id):
     # Fetch progress associated with the project
     progress = project.progress.all()
 
+    if request.method == 'POST':
+        form = ProgressForm(request.POST)
+        if form.is_valid():
+            progress = form.save(commit=False)
+            # ผูก Progress นี้กับ Project ที่ระบุ
+            progress.save()
+            progress.projects.add(project)
+            return redirect('watch', id=id)  # กลับไปที่หน้าของ Project
+    else:
+        form = ProgressForm()
     # Pass the data to the template
     context = {
         'project': project,
         'videos': videos,
         'progress': progress,
+        'form': form,
     }
     return render(request, 'application/watch.html', context)
 
